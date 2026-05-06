@@ -1,11 +1,15 @@
 import { Request, Response } from "express";
-import { TipoPet } from "../tipos/tipoPet";
+import { TipoPet } from "../tipos/TipoPet";
+import { EnumEspecie } from "../enum/EnumEspecie";
 
 let listaDePets: TipoPet[] = [];
 
 export default class PetController {
   criaPet(req: Request, res: Response) {
     const { id, adotado, nome, especie, idade } = <TipoPet>req.body;
+    if (!Object.values(EnumEspecie).includes(especie)) {
+      return res.status(400).json({ error: "Espécie não encontrada" });
+    }
     const novoPet = { id, adotado, nome, especie, idade };
     listaDePets.push(novoPet);
     return res.status(201).send(novoPet);
