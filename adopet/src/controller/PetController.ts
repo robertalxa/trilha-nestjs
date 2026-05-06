@@ -29,4 +29,15 @@ export default class PetController {
     pet.adotado = adotado;
     return res.status(200).json(pet);
   }
+
+  deletaPet(req: Request, res: Response) {
+    const { id } = req.params;
+    const pet = listaDePets.find((pet) => pet.id === Number(id));
+    if (!pet) {
+      return res.status(404).json({ erro: "Pet não encontrado" });
+    }
+    const index = listaDePets.indexOf(pet);
+    listaDePets.splice(index, 1);
+    return res.status(200).json({ mensagem: "Pet deletado com sucesso" });
+  }
 }
