@@ -29,8 +29,9 @@ export default class PetController {
     return res.status(201).send(novoPet);
   }
 
-  listaPets(req: Request, res: Response) {
-    return res.status(200).json(listaDePets);
+  async listaPets(req: Request, res: Response) {
+    const listaDePetss = await this.repository.listaPet();
+    return res.status(200).json(listaDePetss);
   }
 
   atualizaPet(req: Request, res: Response) {
