@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { TipoPet } from "../tipos/TipoPet";
 import { EnumEspecie } from "../enum/EnumEspecie";
+import PetRepository from "../repositories/interfaces/PetRepository";
 
 let id = 0;
 function geraId() {
@@ -10,13 +11,15 @@ function geraId() {
 let listaDePets: TipoPet[] = [];
 
 export default class PetController {
+  constructor(private repository: PetRepository) {}
+
   criaPet(req: Request, res: Response) {
     const { adotado, nome, especie, dataDeNascimento } = <TipoPet>req.body;
     if (!Object.values(EnumEspecie).includes(especie)) {
       return res.status(400).json({ error: "Espécie não encontrada" });
     }
     const novoPet = { id: geraId(), adotado, nome, especie, dataDeNascimento };
-    listaDePets.push(novoPet);
+    this.repository.criaPet(novoPet);
     return res.status(201).send(novoPet);
   }
 
