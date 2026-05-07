@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
-import PetEntity from "../../entities/PetEntity";
-import InterfacePetRepository from "./interfacePetRepository";
+import PetEntity from "../entities/PetEntity";
+import InterfacePetRepository from "./interfaces/interfacePetRepository";
 
 export default class PetRepository implements InterfacePetRepository {
   private repository: Repository<PetEntity>;

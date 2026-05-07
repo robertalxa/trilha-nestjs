@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { TipoPet } from "../tipos/TipoPet";
 import { EnumEspecie } from "../enum/EnumEspecie";
-import PetRepository from "../repositories/interfaces/PetRepository";
+import PetRepository from "../repositories/PetRepository";
 import PetEntity from "../entities/PetEntity";
 
 let id = 0;
