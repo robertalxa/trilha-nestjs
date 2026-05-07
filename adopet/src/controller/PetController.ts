@@ -19,12 +19,7 @@ export default class PetController {
     if (!Object.values(EnumEspecie).includes(especie)) {
       return res.status(400).json({ error: "Espécie não encontrada" });
     }
-    const novoPet = new PetEntity();
-    ((novoPet.id = geraId()),
-      (novoPet.adotado = adotado),
-      (novoPet.nome = nome),
-      (novoPet.especie = especie),
-      (novoPet.dataDeNascimento = dataDeNascimento));
+    const novoPet = new PetEntity(nome, especie, dataDeNascimento, adotado);
     this.repository.criaPet(novoPet);
     return res.status(201).send(novoPet);
   }
@@ -38,12 +33,7 @@ export default class PetController {
     const { id } = req.params;
     const { adotado, especie, dataDeNascimento, nome } = req.body as TipoPet;
 
-    const pet = new PetEntity();
-
-    pet.adotado = adotado;
-    pet.especie = especie;
-    pet.dataDeNascimento = dataDeNascimento;
-    pet.nome = nome;
+    const pet = new PetEntity(nome, especie, dataDeNascimento, adotado);
 
     const { success, message } = await this.repository.atualizaPet(
       Number(id),
