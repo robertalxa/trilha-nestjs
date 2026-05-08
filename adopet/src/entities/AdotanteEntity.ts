@@ -5,7 +5,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import EnderecoEntity from "./Endereco";
+import EnderecoEntity from "./EnderecoEntity";
 
 @Entity()
 export default class AdotanteEntity {
