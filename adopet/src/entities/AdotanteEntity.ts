@@ -2,21 +2,27 @@ import {
   Column,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import EnderecoEntity from "./EnderecoEntity";
+import PetEntity from "./PetEntity";
 
 @Entity()
 export default class AdotanteEntity {
   @PrimaryGeneratedColumn()
   id!: number;
+
   @Column()
   nome: string;
+
   @Column()
   senha: string;
+
   @Column()
   celular: string;
+
   @Column({
     nullable: true,
   })
@@ -29,6 +35,9 @@ export default class AdotanteEntity {
   })
   @JoinColumn()
   endereco?: EnderecoEntity;
+
+  @OneToMany(() => PetEntity, (pet) => pet.adotante)
+  pets!: PetEntity[];
 
   constructor(
     nome: string,
