@@ -1,26 +1,32 @@
 import { Repository } from "typeorm";
 import PetEntity from "../entities/PetEntity";
 import InterfacePetRepository from "./interfaces/interfacePetRepository";
+import AdotanteEntity from "../entities/AdotanteEntity";
 
 export default class PetRepository implements InterfacePetRepository {
-  private repository: Repository<PetEntity>;
+  private petRepository: Repository<PetEntity>;
+  private adotanteRepository: Repository<AdotanteEntity>;
 
-  constructor(repository: Repository<PetEntity>) {
-    this.repository = repository;
+  constructor(
+    petRepository: Repository<PetEntity>,
+    adotanteRepository: Repository<AdotanteEntity>,
+  ) {
+    this.petRepository = petRepository;
+    this.adotanteRepository = adotanteRepository;
   }
 
   criaPet(pet: PetEntity): void {
-    this.repository.save(pet);
+    this.petRepository.save(pet);
   }
   async listaPet(): Promise<Array<PetEntity>> {
-    return await this.repository.find();
+    return await this.petRepository.find();
   }
   async atualizaPet(
     id: number,
     newData: PetEntity,
   ): Promise<{ success: boolean; message?: string }> {
     try {
-      const petToUpdate = await this.repository.findOne({
+      const petToUpdate = await this.petRepository.findOne({
         where: {
           id,
         },
@@ -31,16 +37,16 @@ export default class PetRepository implements InterfacePetRepository {
 
       Object.assign(petToUpdate, newData);
 
-      this.repository.save(petToUpdate);
+      this.petRepository.save(petToUpdate);
       return { success: true };
     } catch (error) {
       throw error;
     }
-    // return await this.repository.update(pet, { id: id });
+    // return await this.petRepository.update(pet, { id: id });
   }
   async deletaPet(id: number): Promise<{ success: boolean; message?: string }> {
     try {
-      const petToDelete = await this.repository.findOne({
+      const petToDelete = await this.petRepository.findOne({
         where: {
           id,
         },
@@ -53,11 +59,33 @@ export default class PetRepository implements InterfacePetRepository {
         };
       }
 
-      await this.repository.remove(petToDelete);
+      await this.petRepository.remove(petToDelete);
 
       return { success: true };
     } catch (error) {
       throw error;
     }
+  }
+
+  async adotaPet(
+    idPet: number,
+    idAdotante: number,
+  ): Promise<{ success: boolean; message?: string }> {
+    const pet = await this.petRepository.findOne({ where: { id: idPet } });
+    if (!pet) {
+      return { success: false, message: "Pet não encontrado" };
+    }
+
+    const adotante = await this.adotanteRepository.findOne({
+      where: { id: idAdotante },
+    });
+    if (!adotante) {
+      return { success: false, message: "Adotante não encontrado" };
+    }
+
+    pet.adotante = adotante;
+    pet.adotado = true;
+    await this.petRepository.save(pet);
+    return { success: true };
   }
 }
