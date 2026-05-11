@@ -20,10 +20,10 @@ export default class PetController {
       req.body
     );
     if (!Object.values(EnumEspecie).includes(especie)) {
-      return res.status(400).json({ error: "Espécie não encontrada" });
+      return res.status(400).json({ erros: "Espécie não encontrada" });
     }
     if (porte && !(porte in EnumPorte)) {
-      return res.status(400).json({ error: "Porte não encontrada" });
+      return res.status(400).json({ erros: "Porte não encontrada" });
     }
     const novoPet = new PetEntity(
       nome,
@@ -35,7 +35,7 @@ export default class PetController {
     this.repository.criaPet(novoPet);
     return res
       .status(201)
-      .send({ data: { id: novoPet.id, nome, especie, porte } });
+      .send({ dados: { id: novoPet.id, nome, especie, porte } });
   }
 
   async listaPets(
@@ -43,7 +43,7 @@ export default class PetController {
     res: Response<TipoResponseBodyPet>,
   ) {
     const listaDePetss = await this.repository.listaPet();
-    const data = listaDePetss.map((pet) => {
+    const dados = listaDePetss.map((pet) => {
       return {
         id: pet.id,
         nome: pet.nome,
@@ -51,7 +51,7 @@ export default class PetController {
         porte: pet.porte,
       };
     });
-    return res.status(200).json({ data });
+    return res.status(200).json({ dados });
   }
 
   async atualizaPet(
@@ -70,7 +70,7 @@ export default class PetController {
     );
 
     if (!success) {
-      return res.status(404).json({ error: message });
+      return res.status(404).json({ erros: message });
     }
 
     return res.status(204);
@@ -85,7 +85,7 @@ export default class PetController {
     const { success, message } = await this.repository.deletaPet(Number(id));
 
     if (!success) {
-      return res.status(404).json({ error: message });
+      return res.status(404).json({ erros: message });
     }
 
     return res.status(204);
@@ -103,7 +103,7 @@ export default class PetController {
     );
 
     if (!success) {
-      return res.status(404).json({ error: message });
+      return res.status(404).json({ erros: message });
     }
     return res.sendStatus(204);
   }
@@ -119,7 +119,7 @@ export default class PetController {
       valor as string,
     );
 
-    const data = listaPets.map((pet) => {
+    const dados = listaPets.map((pet) => {
       return {
         id: pet.id,
         nome: pet.nome,
@@ -127,6 +127,6 @@ export default class PetController {
         porte: pet.porte,
       };
     });
-    return res.status(200).json({ data });
+    return res.status(200).json({ dados });
   }
 }

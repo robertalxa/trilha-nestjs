@@ -7,10 +7,10 @@ type TipoRequestParamsPet = {
   adotante_id?: string;
 };
 type TipoResponseBodyPet = {
-  data?:
+  dados?:
     | Pick<PetEntity, "id" | "nome" | "especie" | "porte">
     | Pick<PetEntity, "id" | "nome" | "especie" | "porte">[];
-  error?: unknown;
+  erros?: unknown;
 };
 
 export { TipoRequestBodyPet, TipoRequestParamsPet, TipoResponseBodyPet };

@@ -30,7 +30,7 @@ export default class AdotanteController {
 
     return res
       .status(200)
-      .json({ data: { id: novoAdotante.id, nome, celular, endereco } });
+      .json({ dados: { id: novoAdotante.id, nome, celular, endereco } });
   }
 
   async listaAdotante(
@@ -38,7 +38,7 @@ export default class AdotanteController {
     res: Response<TipoResponseBodyAdotante>,
   ) {
     const listaAdotantes = await this.repository.listaAdotante();
-    const data = listaAdotantes.map((adotante) => {
+    const dados = listaAdotantes.map((adotante) => {
       return {
         id: adotante.id,
         nome: adotante.nome,
@@ -46,7 +46,7 @@ export default class AdotanteController {
         endereco: adotante.endereco || undefined,
       };
     });
-    return res.status(200).json({ data });
+    return res.status(200).json({ dados });
   }
 
   async atualizaAdotante(
@@ -71,7 +71,7 @@ export default class AdotanteController {
 
     if (!success) {
       return res.status(404).json({
-        error: message,
+        erros: message,
       });
     }
 
@@ -90,7 +90,7 @@ export default class AdotanteController {
 
     if (!success) {
       return res.status(404).json({
-        error: message,
+        erros: message,
       });
     }
 
@@ -110,7 +110,7 @@ export default class AdotanteController {
 
     if (!success) {
       return res.status(404).json({
-        error: { message },
+        erros: { message },
       });
     }
 
