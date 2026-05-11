@@ -2,11 +2,18 @@ import { Request, Response } from "express";
 import AdotanteRepository from "../repositories/AdotanteRepository";
 import AdotanteEntity from "../entities/AdotanteEntity";
 import EnderecoEntity from "../entities/EnderecoEntity";
+import {
+  TipoRequestBodyAdotante,
+  TipoResponseBodyAdotante,
+} from "../tipos/tipoAdotante";
 
 export default class AdotanteController {
   constructor(private repository: AdotanteRepository) {}
 
-  async criaAdotante(req: Request, res: Response) {
+  async criaAdotante(
+    req: Request<{}, {}, TipoRequestBodyAdotante>,
+    res: Response<TipoResponseBodyAdotante>,
+  ) {
     const { celular, endereco, foto, nome, senha } = req.body;
 
     const novoAdotante = new AdotanteEntity(
@@ -19,7 +26,9 @@ export default class AdotanteController {
 
     await this.repository.criaAdotante(novoAdotante);
 
-    return res.status(200).json(novoAdotante);
+    return res
+      .status(200)
+      .json({ data: { id: novoAdotante.id, nome, celular } });
   }
 
   async listaAdotante(req: Request, res: Response) {
