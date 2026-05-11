@@ -74,7 +74,7 @@ export default class AdotanteRepository implements InterfaceAdotanteRepository {
     const novoEndereco = new EnderecoEntity(cidade, estado);
     adotante.endereco = novoEndereco;
 
-    await this.repository.save(adotante);
+    this.repository.save(adotante);
 
     return { success: true, message: "Endereço atualizado" };
   }
