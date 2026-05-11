@@ -9,15 +9,6 @@ import {
   TipoResponseBodyAdotante,
 } from "../tipos/tiposAdotante";
 
-const adotanteBodyValidator: yup.ObjectSchema<
-  Omit<TipoRequestBodyAdotante, "endereco">
-> = yup.object({
-  nome: yup.string().defined().required(),
-  senha: yup.string().defined().required().min(6),
-  celular: yup.string().defined().required(),
-  foto: yup.string().optional(),
-});
-
 export default class AdotanteController {
   constructor(private repository: AdotanteRepository) {}
 
@@ -26,22 +17,6 @@ export default class AdotanteController {
     res: Response<TipoResponseBodyAdotante>,
   ) {
     const { celular, endereco, foto, nome, senha } = req.body;
-
-    let bodyValidated: TipoRequestBodyAdotante;
-
-    try {
-      bodyValidated = await adotanteBodyValidator.validate(req.body, {
-        abortEarly: false,
-      });
-    } catch (errors) {
-      const yupErrors = errors as yup.ValidationError;
-      const validationErrors: Record<string, string> = {};
-      yupErrors.inner.forEach((error) => {
-        if (!error.path) return;
-        validationErrors[error.path] = error.message;
-      });
-      return res.status(400).json({ error: validationErrors });
-    }
 
     const novoAdotante = new AdotanteEntity(
       nome,
