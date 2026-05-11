@@ -9,5 +9,8 @@ export default interface InterfacePetRepository {
     pet: PetEntity,
   ): void | Promise<{ success: boolean; message?: string }>;
   deletaPet(id: number): void | Promise<{ success: boolean; message?: string }>;
-  buscaPetPeloPorte(porte: EnumPorte): Promise<PetEntity[]> | void;
+  buscaPetPorCampoGenerico<Tipo extends keyof PetEntity>(
+    campo: Tipo,
+    valor: PetEntity[Tipo],
+  ): Promise<PetEntity[]> | PetEntity[];
 }
