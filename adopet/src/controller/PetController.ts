@@ -3,6 +3,7 @@ import { TipoPet } from "../tipos/TipoPet";
 import { EnumEspecie } from "../enum/EnumEspecie";
 import PetRepository from "../repositories/PetRepository";
 import PetEntity from "../entities/PetEntity";
+import { EnumPorte } from "../enum/EnumPorte";
 
 let id = 0;
 function geraId() {
@@ -15,11 +16,22 @@ export default class PetController {
   constructor(private repository: PetRepository) {}
 
   criaPet(req: Request, res: Response) {
-    const { adotado, nome, especie, dataDeNascimento } = <PetEntity>req.body;
+    const { adotado, nome, especie, porte, dataDeNascimento } = <PetEntity>(
+      req.body
+    );
     if (!Object.values(EnumEspecie).includes(especie)) {
       return res.status(400).json({ error: "Espécie não encontrada" });
     }
-    const novoPet = new PetEntity(nome, especie, dataDeNascimento, adotado);
+    if (porte && !(porte in EnumPorte)) {
+      return res.status(400).json({ error: "Porte não encontrada" });
+    }
+    const novoPet = new PetEntity(
+      nome,
+      especie,
+      dataDeNascimento,
+      adotado,
+      porte,
+    );
     this.repository.criaPet(novoPet);
     return res.status(201).send(novoPet);
   }
@@ -31,9 +43,10 @@ export default class PetController {
 
   async atualizaPet(req: Request, res: Response) {
     const { id } = req.params;
-    const { adotado, especie, dataDeNascimento, nome } = req.body as TipoPet;
+    const { adotado, especie, porte, dataDeNascimento, nome } =
+      req.body as PetEntity;
 
-    const pet = new PetEntity(nome, especie, dataDeNascimento, adotado);
+    const pet = new PetEntity(nome, especie, dataDeNascimento, adotado, porte);
 
     const { success, message } = await this.repository.atualizaPet(
       Number(id),
