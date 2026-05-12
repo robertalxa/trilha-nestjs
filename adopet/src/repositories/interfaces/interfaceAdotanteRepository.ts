@@ -2,7 +2,7 @@ import AdotanteEntity from "../../entities/AdotanteEntity";
 import EnderecoEntity from "../../entities/EnderecoEntity";
 
 export default interface InterfaceAdotanteRepository {
-  criaAdotante(adotante: AdotanteEntity): Promise<AdotanteEntity>;
+  criaAdotante(adotante: AdotanteEntity): Promise<void>;
   listaAdotante(): Promise<AdotanteEntity[]>;
   atualizaAdotante(
     id: number,

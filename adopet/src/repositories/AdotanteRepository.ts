@@ -2,7 +2,7 @@ import { Repository } from "typeorm";
 import AdotanteEntity from "../entities/AdotanteEntity";
 import InterfaceAdotanteRepository from "./interfaces/interfaceAdotanteRepository";
 import EnderecoEntity from "../entities/EnderecoEntity";
-import { NaoEncontrado } from "../utils/manipulaErros";
+import { NaoEncontrado, RequisicaoRuim } from "../utils/manipulaErros";
 
 export default class AdotanteRepository implements InterfaceAdotanteRepository {
   private repository: Repository<AdotanteEntity>;
@@ -44,8 +44,15 @@ export default class AdotanteRepository implements InterfaceAdotanteRepository {
     return { success: true };
   }
 
-  async criaAdotante(adotante: AdotanteEntity): Promise<AdotanteEntity> {
-    return await this.repository.save(adotante);
+  private async verificaCelularAdotante(celular: string) {
+    return await this.repository.findOne({ where: { celular } });
+  }
+
+  async criaAdotante(adotante: AdotanteEntity): Promise<void> {
+    if (await this.verificaCelularAdotante(adotante.celular)) {
+      throw new RequisicaoRuim("Celular já cadastrado");
+    }
+    await this.repository.save(adotante);
   }
 
   async atualizaEnderecoAdotante(
