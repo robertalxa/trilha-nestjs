@@ -23,10 +23,7 @@ export default class PetRepository implements InterfacePetRepository {
   async listaPet(): Promise<Array<PetEntity>> {
     return await this.petRepository.find();
   }
-  async atualizaPet(
-    id: number,
-    newData: PetEntity,
-  ): Promise<{ success: boolean; message?: string }> {
+  async atualizaPet(id: number, newData: PetEntity) {
     console.log("Entrou na funcao");
     const petToUpdate = await this.petRepository.findOne({
       where: {
@@ -40,9 +37,8 @@ export default class PetRepository implements InterfacePetRepository {
     Object.assign(petToUpdate, newData);
 
     this.petRepository.save(petToUpdate);
-    return { success: true };
   }
-  async deletaPet(id: number): Promise<{ success: boolean; message?: string }> {
+  async deletaPet(id: number) {
     const petToDelete = await this.petRepository.findOne({
       where: {
         id,
@@ -54,14 +50,9 @@ export default class PetRepository implements InterfacePetRepository {
     }
 
     await this.petRepository.remove(petToDelete);
-
-    return { success: true };
   }
 
-  async adotaPet(
-    idPet: number,
-    idAdotante: number,
-  ): Promise<{ success: boolean; message?: string }> {
+  async adotaPet(idPet: number, idAdotante: number) {
     const pet = await this.petRepository.findOne({ where: { id: idPet } });
     if (!pet) {
       throw new NaoEncontrado("Pet não encontrado");
@@ -77,7 +68,6 @@ export default class PetRepository implements InterfacePetRepository {
     pet.adotante = adotante;
     pet.adotado = true;
     await this.petRepository.save(pet);
-    return { success: true };
   }
 
   async buscaPetPorCampoGenerico<Tipo extends keyof PetEntity>(

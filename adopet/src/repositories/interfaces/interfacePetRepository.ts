@@ -4,11 +4,9 @@ import { EnumPorte } from "../../enum/EnumPorte";
 export default interface InterfacePetRepository {
   criaPet(pet: PetEntity): void;
   listaPet(): PetEntity[] | Promise<Array<PetEntity>>;
-  atualizaPet(
-    id: number,
-    pet: PetEntity,
-  ): void | Promise<{ success: boolean; message?: string }>;
-  deletaPet(id: number): void | Promise<{ success: boolean; message?: string }>;
+  atualizaPet(id: number, pet: PetEntity): void;
+  deletaPet(id: number): void;
+  adotaPet(idPet: number, idAdotante: number): void;
   buscaPetPorCampoGenerico<Tipo extends keyof PetEntity>(
     campo: Tipo,
     valor: PetEntity[Tipo],

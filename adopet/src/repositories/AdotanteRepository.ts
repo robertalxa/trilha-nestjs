@@ -15,10 +15,7 @@ export default class AdotanteRepository implements InterfaceAdotanteRepository {
     return await this.repository.find();
   }
 
-  async atualizaAdotante(
-    id: number,
-    adotante: AdotanteEntity,
-  ): Promise<{ success: boolean; message?: string }> {
+  async atualizaAdotante(id: number, adotante: AdotanteEntity) {
     const adotanteToUpdate = await this.repository.findOne({ where: { id } });
 
     if (!adotanteToUpdate) {
@@ -28,12 +25,9 @@ export default class AdotanteRepository implements InterfaceAdotanteRepository {
     Object.assign(adotanteToUpdate, adotante);
 
     await this.repository.save(adotanteToUpdate);
-    return { success: true };
   }
 
-  async deletaAdotante(
-    id: number,
-  ): Promise<{ success: boolean; message?: string }> {
+  async deletaAdotante(id: number) {
     const adotanteToDelete = await this.repository.find({ where: { id } });
 
     if (!adotanteToDelete) {
@@ -41,7 +35,6 @@ export default class AdotanteRepository implements InterfaceAdotanteRepository {
     }
 
     await this.repository.remove(adotanteToDelete);
-    return { success: true };
   }
 
   private async verificaCelularAdotante(celular: string) {
@@ -55,10 +48,7 @@ export default class AdotanteRepository implements InterfaceAdotanteRepository {
     await this.repository.save(adotante);
   }
 
-  async atualizaEnderecoAdotante(
-    idAdotante: number,
-    endereco: EnderecoEntity,
-  ): Promise<{ success: boolean; message?: string }> {
+  async atualizaEnderecoAdotante(idAdotante: number, endereco: EnderecoEntity) {
     const adotante = await this.repository.findOne({
       where: { id: idAdotante },
     });
@@ -72,7 +62,5 @@ export default class AdotanteRepository implements InterfaceAdotanteRepository {
     adotante.endereco = novoEndereco;
 
     this.repository.save(adotante);
-
-    return { success: true, message: "Endereço atualizado" };
   }
 }
