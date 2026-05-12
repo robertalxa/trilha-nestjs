@@ -4,6 +4,7 @@ import { AppDataSource } from "../config/dataSource";
 import AdotanteRepository from "../repositories/AdotanteRepository";
 import { middlewareValidadorBodyAdotante } from "../middleware/validadores/adotanteRequestBody";
 import { middlewareValidadorBodyEndereco } from "../middleware/validadores/enderecoRequestBody";
+import { verificaIdMiddleware } from "../middleware/verificaId";
 
 const adotanteRepository = new AdotanteRepository(
   AppDataSource.getRepository("AdotanteEntity"),
@@ -22,11 +23,13 @@ router.post("/", validateBodyAdotante, (req, res) =>
   adotanteController.criaAdotante(req, res),
 );
 router.get("/", (req, res) => adotanteController.listaAdotante(req, res));
-router.put("/:id", (req, res) => adotanteController.atualizaAdotante(req, res));
-router.delete("/:id", (req, res) =>
+router.put("/:id", verificaIdMiddleware, (req, res) =>
+  adotanteController.atualizaAdotante(req, res),
+);
+router.delete("/:id", verificaIdMiddleware, (req, res) =>
   adotanteController.deletaAdotante(req, res),
 );
-router.patch("/:id", validateBodyEndereco, (req, res) =>
+router.patch("/:id", verificaIdMiddleware, validateBodyEndereco, (req, res) =>
   adotanteController.atualizaEndereco(req, res),
 );
 

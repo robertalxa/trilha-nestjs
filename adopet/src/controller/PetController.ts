@@ -68,7 +68,7 @@ export default class PetController {
       return res.status(404).json({ erros: message });
     }
 
-    return res.status(204);
+    return res.sendStatus(204);
   }
 
   async deletaPet(
@@ -83,7 +83,7 @@ export default class PetController {
       return res.status(404).json({ erros: message });
     }
 
-    return res.status(204);
+    return res.sendStatus(204);
   }
 
   async adotaPet(
